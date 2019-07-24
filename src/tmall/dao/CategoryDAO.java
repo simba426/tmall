@@ -73,12 +73,12 @@ public class CategoryDAO {
         return list(0, Short.MAX_VALUE);
     }
 
-    public List<Category> list(int start, int end) {
+    public List<Category> list(int start, int count) {
         List<Category> beans = new ArrayList<Category>();
         String sql = "select * from category order by id desc limit ?,?";
         try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, start);
-            ps.setInt(2, end);
+            ps.setInt(2, count);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
