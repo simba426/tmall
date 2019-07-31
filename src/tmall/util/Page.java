@@ -1,10 +1,10 @@
 package tmall.util;
 
 public class Page {
-    private int start;
-    private int count;
-    private int total;
-    private String param;
+    int start;
+    int count;
+    int total;
+    String param;
 
     public int getStart () {
         return start;

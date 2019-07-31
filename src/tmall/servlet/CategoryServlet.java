@@ -63,6 +63,40 @@ public class CategoryServlet extends BaseBackServlet{
 
     @Override
     public String update(HttpServletRequest request, HttpServletResponse response, Page page) {
+        Map<String, String> params = new HashMap<>();
+        InputStream is = super.parseUpload(request, params);
+        System.out.println(params);
+        String name = params.get("name");
+        int id = Integer.parseInt(params.get("id"));
+
+        Category c = new Category();
+        c.setName(name);
+        c.setId(id);
+        categoryDAO.update(c);
+
+        File imageFolder = new File(request.getSession().getServletContext().getRealPath("img/category"));
+        File file = new File(imageFolder, c.getId() + ".jpg");
+        file.getParentFile().mkdirs();
+        //此处getParentFile相当于先创建imageFolder这个目录，然后在这个目录下新建jpg文件
+
+        try {
+            if (null != is && 0 != is.available()) {
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    byte[] b = new byte[1024 * 1024];
+                    int length = 0;
+                    while (-1 != (length = is.read(b))) {
+                        fos.write(b, 0, length);
+                    }
+                    fos.flush();
+                    BufferedImage img = ImageUtil.change2jpg(file);
+                    ImageIO.write(img, "jpg", file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return "@admin_category_list";
     }
@@ -81,6 +115,9 @@ public class CategoryServlet extends BaseBackServlet{
 
     @Override
     public String edit(HttpServletRequest request, HttpServletResponse response, Page page) {
-        return "@admin_category_list";
+        int id = Integer.parseInt(request.getParameter("id"));
+        Category c = categoryDAO.get(id);
+        request.setAttribute("c", c);
+        return "admin/editCategory.jsp";
     }
 }
