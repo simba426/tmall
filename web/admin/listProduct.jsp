@@ -114,7 +114,7 @@
                     </tr>
                     <tr>
                         <td>原价格</td>
-                        <td><input id="orignalPrice" value="99.98" name="orignalPrice" type="text"
+                        <td><input id="originalPrice" value="99.98" name="originalPrice" type="text"
                                    class="form-control"></td>
                     </tr>
                     <tr>
