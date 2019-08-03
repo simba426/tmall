@@ -1,32 +1,29 @@
 package tmall.bean;
 
 public class ProductImage {
-    private int id;
     private String type;
-    Product product;
+    private Product product;
+    private int id;
 
-    public void setId (int id) {
-        this.id = id;
-    }
-
-    public int getId () {
+    public int getId() {
         return id;
     }
 
-    public void setType (String type) {
-        this.type = type;
+
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getType () {
+    public String getType() {
         return type;
     }
-
-    public void setProduct (Product product) {
-        this.product = product;
+    public void setType(String type) {
+        this.type = type;
     }
-
-    public Product getProduct () {
+    public Product getProduct() {
         return product;
     }
-
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

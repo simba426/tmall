@@ -2,6 +2,7 @@ package tmall.servlet;
 
 import tmall.bean.Category;
 import tmall.bean.Product;
+import tmall.bean.PropertyValue;
 import tmall.util.Page;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class ProductServlet extends BaseBackServlet {
         int cid = Integer.parseInt(request.getParameter("cid"));
 
         Category c = categoryDAO.get(cid);
-        Product p = productDAO.get(pid);
+        Product p = new Product();
 
         int stock = Integer.parseInt(request.getParameter("stock"));
         float orignalPrice = Float.parseFloat(request.getParameter("orignalPrice"));
@@ -58,6 +59,8 @@ public class ProductServlet extends BaseBackServlet {
         p.setPromotePrice(promotePrice);
         p.setOrignalPrice(orignalPrice);
         p.setName(name);
+        p.setId(pid);
+        p.setCategory(c);
 
         productDAO.update(p);
         return "@admin_product_list?cid=" + c.getId();
@@ -68,7 +71,7 @@ public class ProductServlet extends BaseBackServlet {
         int cid = Integer.parseInt(request.getParameter("cid"));
         Category c = categoryDAO.get(cid);
         List<Product> ps = productDAO.list(cid, page.getStart(), page.getCount());
-        int total = page.getTotal();
+        int total = productDAO.getTotal(cid);
         page.setTotal(total);
         page.setParam("&cid=" + c.getId());
 
@@ -86,5 +89,26 @@ public class ProductServlet extends BaseBackServlet {
         request.setAttribute("p", p);
         return "admin/editProduct.jsp";
     }
+
+    public String editPropertyValue (HttpServletRequest request, HttpServletResponse response, Page page) {
+        int pid = Integer.parseInt(request.getParameter("id"));
+        Product p = productDAO.get(pid);
+        request.setAttribute("p", p);
+
+        propertyValueDAO.init(p);
+        List<PropertyValue> pvs = propertyValueDAO.list(p.getId());
+        request.setAttribute("pvs", pvs);
+        return "admin/editPropertyValue.jsp";
+    }
+
+    public String updatePropertyValue (HttpServletRequest request, HttpServletResponse response, Page page) {
+        int pvid = Integer.parseInt(request.getParameter("pvid"));
+        String value = request.getParameter("value");
+        PropertyValue pv = propertyValueDAO.get(pvid);
+        pv.setValue(value);
+        propertyValueDAO.update(pv);
+        return "%success";
+    }
+
 
 }

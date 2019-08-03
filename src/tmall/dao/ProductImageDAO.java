@@ -21,7 +21,7 @@ public class ProductImageDAO {
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next())
-                bean.setId(rs.getInt("id"));
+                bean.setId(rs.getInt(1));
         } catch (SQLException e) {
             e.printStackTrace();
         }
